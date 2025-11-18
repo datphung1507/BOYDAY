@@ -164,26 +164,26 @@
       }
     }
 
-    /* ẢNH Ở CUỐI */
-   .final-img {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.3); /* lúc đầu nhỏ xíu */
-  width: 60vw;          /* chiếm khoảng 60% chiều ngang */
-  max-width: 450px;     /* giới hạn tối đa */
-  border-radius: 20px;
-  box-shadow:
-    0 0 14px rgba(255, 180, 230, 0.95),
-    0 0 30px rgba(255, 90, 180, 0.8);
-  opacity: 0;
-  transition: opacity 1.6s ease, transform 1.6s ease;
-  z-index: 5;           /* cao hơn trái tim (z-index:3) để đè lên */
-}
+    /* ẢNH Ở CUỐI – phóng to giữa màn hình, che tim */
+    .final-img {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.3); /* lúc đầu nhỏ xíu */
+      width: 60vw;
+      max-width: 450px;
+      border-radius: 20px;
+      box-shadow:
+        0 0 14px rgba(255, 180, 230, 0.95),
+        0 0 30px rgba(255, 90, 180, 0.8);
+      opacity: 0;
+      transition: opacity 1.6s ease, transform 1.6s ease;
+      z-index: 5; /* cao hơn trái tim */
+    }
 
-.final-img.show {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1.25); /* phóng to, che tim */
+    .final-img.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.25); /* phóng to che tim */
     }
   </style>
 </head>
@@ -213,7 +213,7 @@
   </div>
 </div>
 
-<!-- ẢNH CUỐI CÙNG -->
+<!-- ẢNH CUỐI CÙNG – sẽ hiện SAU trái tim -->
 <img id="finalImage" src="final.png" alt="us" class="final-img" />
 
 <script>
@@ -323,23 +323,29 @@
     const showTime = 2000;
     const gapTime  = 400;
 
+    // chạy từng dòng: 5,4,3,2,1, rồi chữ chúc
     for (const text of LINES) {
       centerText.innerHTML = text;
       centerText.classList.add("show");
-      await sleep(showTime);
+
+      // riêng câu "Chúc anhiu của bé" đứng lâu hơn 1s
+      const extra = (text === "Chúc anhiu của bé") ? 1000 : 0;
+      await sleep(showTime + extra);
+
       centerText.classList.remove("show");
       await sleep(gapTime);
     }
 
-    // hiện trái tim to
+    // hiện trái tim to trước
     heartContainer.classList.add("show");
     await sleep(2500);
 
-    // hiện hình ở dưới
+    // SAU ĐÓ: hiện ảnh phóng to ở giữa và làm tim mờ đi
     finalImage.classList.add("show");
-    await sleep(15);
+    heartContainer.style.opacity = 0.25; // muốn tim biến mất luôn thì = 0
+    await sleep(1500);
 
-    // chữ bay bay
+    // rồi mới cho chữ bay bay
     spawnFloatingMessages();
     setTimeout(spawnFloatingMessages, 6000);
   }
@@ -350,7 +356,6 @@
     if (bgm) {
       bgm.volume = 0.8;
       bgm.play().catch(() => {
-        // nếu trình duyệt chặn autoplay thì thôi, không ép được
         console.warn("Trình duyệt chặn autoplay nhạc.");
       });
     }
@@ -361,5 +366,3 @@
 
 </body>
 </html>
-
-
