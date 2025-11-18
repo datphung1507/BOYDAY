@@ -112,7 +112,6 @@
       }
     }
 
-    /* Tên trong tim – không dính viền */
     .heart-name {
       position: absolute;
       top: 47%;
@@ -134,7 +133,6 @@
       to   { transform: translate(-50%, -50%) scale(1.05); }
     }
 
-    /* Các câu chúc bay bay ở cuối */
     .floating-text {
       position: fixed;
       color: #ffd6f4;
@@ -169,15 +167,13 @@
 </head>
 <body>
 
-<!-- NHẠC NỀN -->
-<audio id="bgm" src="music.mp3" preload="auto" loop></audio>
+<!-- NHẠC NỀN: cố gắng tự bật -->
+<audio id="bgm" src="music.mp3" preload="auto" loop autoplay></audio>
 
 <canvas id="matrix"></canvas>
 
-<!-- Text ở giữa -->
 <div id="centerText" class="center-text"></div>
 
-<!-- Trái tim + tên -->
 <div id="heartContainer" class="heart-container">
   <div class="heart-outline">
     <svg viewBox="0 0 200 180">
@@ -314,21 +310,15 @@
     setTimeout(spawnFloatingMessages, 6000);
   }
 
-  // BẬT NHẠC + CHẠY SEQUENCE
+  // Cố gắng bật nhạc ngay khi load
   window.addEventListener("load", () => {
     const bgm = document.getElementById("bgm");
     if (bgm) {
       bgm.volume = 0.8;
-
-      // do trình duyệt chặn autoplay, nên chờ người dùng chạm 1 cái
-      const resume = () => {
-        bgm.play().catch(() => {});
-        window.removeEventListener("click", resume);
-        window.removeEventListener("touchstart", resume);
-      };
-
-      window.addEventListener("click", resume, { once: true });
-      window.addEventListener("touchstart", resume, { once: true });
+      bgm.play().catch(() => {
+        // nếu trình duyệt chặn thì đành chịu, không có cách nào ép
+        console.warn("Trình duyệt chặn autoplay nhạc.");
+      });
     }
 
     setTimeout(startSequence, 800);
