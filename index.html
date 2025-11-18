@@ -29,14 +29,13 @@
       left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
       font-family: "Courier New", monospace;
-      font-size: 80px;          /* chữ chính to */
+      font-size: 80px;
       font-weight: 900;
       text-align: center;
       letter-spacing: 6px;
       white-space: nowrap;
       text-transform: uppercase;
 
-      /* hiệu ứng kiểu xếp bằng dấu/chấm */
       background-image:
         radial-gradient(circle at 1px 1px, #ffecfb 1px, transparent 0),
         radial-gradient(circle at 1px 1px, #ffb4e9 1px, transparent 0);
@@ -76,11 +75,11 @@
 
     .heart-container.show {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1.7); /* to hẳn lên */
+      transform: translate(-50%, -50%) scale(1.7);
     }
 
     .heart-outline {
-      width: 540px;   /* khung tim to */
+      width: 540px;
       height: 480px;
       margin: auto;
       position: relative;
@@ -208,11 +207,9 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // chữ to hơn để nổi hơn
     fontSize = Math.floor(window.innerWidth / 55);
     columns = Math.floor(window.innerWidth / fontSize);
 
-    // mỗi cột bắt đầu ở vị trí ngẫu nhiên để dày hơn
     drops = Array.from({ length: columns }, () =>
       Math.floor(Math.random() * (canvas.height / fontSize))
     );
@@ -222,7 +219,6 @@
   resizeMatrix();
 
   function drawMatrix() {
-    // mờ ít thôi cho vệt dày hơn
     ctx.fillStyle = "rgba(0, 0, 0, 0.03)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -233,16 +229,14 @@
       const x = i * fontSize;
       const y = drops[i] * fontSize;
 
-      // màu hồng gradient theo chiều dọc
-      const intensity = y / canvas.height; // 0 -> 1
+      const intensity = y / canvas.height;
       const r = 255;
-      const g = 90 + intensity * 100;   // 90–190
-      const b = 160 + intensity * 80;   // 160–240
+      const g = 90 + intensity * 100;
+      const b = 160 + intensity * 80;
       ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
 
       ctx.fillText(txt, x, y);
 
-      // tăng tốc độ rơi nhẹ + dày
       if (y > canvas.height && Math.random() > 0.95) {
         drops[i] = 0;
       }
@@ -291,7 +285,7 @@
       span.textContent = messages[i % messages.length];
 
       const x = Math.random() * (vw - 260);
-      const y = Math.random() * (vh * 0.5); // nửa trên màn hình
+      const y = Math.random() * (vh * 0.5);
 
       span.style.left = x + "px";
       span.style.top = y + "px";
@@ -302,8 +296,8 @@
   }
 
   async function startSequence() {
-    const showTime = 2000; // ~2 giây mỗi câu
-    const gapTime  = 400;  // nghỉ 0.4s
+    const showTime = 2000;
+    const gapTime  = 400;
 
     for (const text of LINES) {
       centerText.innerHTML = text;
@@ -313,11 +307,9 @@
       await sleep(gapTime);
     }
 
-    // hiện trái tim
     heartContainer.classList.add("show");
     await sleep(3500);
 
-    // cho chữ bay bay
     spawnFloatingMessages();
     setTimeout(spawnFloatingMessages, 6000);
   }
@@ -328,15 +320,15 @@
     if (bgm) {
       bgm.volume = 0.8;
 
-      bgm.play().catch(() => {
-        const resume = () => {
-          bgm.play().catch(() => {});
-          window.removeEventListener("click", resume);
-          window.removeEventListener("touchstart", resume);
-        };
-        window.addEventListener("click", resume, { once: true });
-        window.addEventListener("touchstart", resume, { once: true });
-      });
+      // do trình duyệt chặn autoplay, nên chờ người dùng chạm 1 cái
+      const resume = () => {
+        bgm.play().catch(() => {});
+        window.removeEventListener("click", resume);
+        window.removeEventListener("touchstart", resume);
+      };
+
+      window.addEventListener("click", resume, { once: true });
+      window.addEventListener("touchstart", resume, { once: true });
     }
 
     setTimeout(startSequence, 800);
