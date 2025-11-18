@@ -8,8 +8,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      <audio id="bgm" src="music.mp3" preload="auto" loop></audio>
-      <canvas id="matrix"></canvas>
       background: #000;
       overflow: hidden;
       font-family: "Poppins", system-ui, sans-serif;
@@ -172,6 +170,9 @@
 </head>
 <body>
 
+<!-- NHẠC NỀN -->
+<audio id="bgm" src="music.mp3" preload="auto" loop></audio>
+
 <canvas id="matrix"></canvas>
 
 <!-- Text ở giữa -->
@@ -321,7 +322,8 @@
     setTimeout(spawnFloatingMessages, 6000);
   }
 
-window.addEventListener("load", () => {
+  // BẬT NHẠC + CHẠY SEQUENCE
+  window.addEventListener("load", () => {
     const bgm = document.getElementById("bgm");
     if (bgm) {
       bgm.volume = 0.8;
@@ -343,4 +345,3 @@ window.addEventListener("load", () => {
 
 </body>
 </html>
-
