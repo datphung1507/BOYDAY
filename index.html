@@ -8,6 +8,8 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
+      <audio id="bgm" src="music.mp3" preload="auto" loop></audio>
+      <canvas id="matrix"></canvas>
       background: #000;
       overflow: hidden;
       font-family: "Poppins", system-ui, sans-serif;
@@ -319,10 +321,26 @@
     setTimeout(spawnFloatingMessages, 6000);
   }
 
-  window.addEventListener("load", () => {
+window.addEventListener("load", () => {
+    const bgm = document.getElementById("bgm");
+    if (bgm) {
+      bgm.volume = 0.8;
+
+      bgm.play().catch(() => {
+        const resume = () => {
+          bgm.play().catch(() => {});
+          window.removeEventListener("click", resume);
+          window.removeEventListener("touchstart", resume);
+        };
+        window.addEventListener("click", resume, { once: true });
+        window.addEventListener("touchstart", resume, { once: true });
+      });
+    }
+
     setTimeout(startSequence, 800);
   });
 </script>
 
 </body>
 </html>
+
