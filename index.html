@@ -22,7 +22,7 @@
       display: block;
     }
 
-    /* TEXT Ở GIỮA (3,2,1 + các câu chúc) */
+    /* TEXT Ở GIỮA (5,4,3,2,1 + các câu chúc) */
     .center-text {
       position: fixed;
       top: 40%;
@@ -163,6 +163,28 @@
         opacity: 0;
       }
     }
+
+    /* ẢNH Ở CUỐI */
+    .final-img {
+      position: fixed;
+      bottom: 7%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.8);
+      width: 280px;
+      max-width: 75vw;
+      border-radius: 20px;
+      box-shadow:
+        0 0 10px rgba(255, 180, 230, 0.9),
+        0 0 26px rgba(255, 90, 180, 0.7);
+      opacity: 0;
+      transition: opacity 1.8s ease, transform 1.8s ease;
+      z-index: 4;
+    }
+
+    .final-img.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
   </style>
 </head>
 <body>
@@ -190,6 +212,9 @@
     </div>
   </div>
 </div>
+
+<!-- ẢNH CUỐI CÙNG -->
+<img id="finalImage" src="final.png" alt="us" class="final-img" />
 
 <script>
   /* ========== NỀN MƯA CHỮ ========== */
@@ -242,9 +267,10 @@
   }
   drawMatrix();
 
-  /* ========== SEQUENCE CHỮ CHÍNH + TRÁI TIM + CHỮ BAY ========== */
+  /* ========== SEQUENCE CHỮ CHÍNH + TRÁI TIM + ẢNH + CHỮ BAY ========== */
   const centerText = document.getElementById("centerText");
   const heartContainer = document.getElementById("heartContainer");
+  const finalImage = document.getElementById("finalImage");
 
   const LINES = [
     "5",
@@ -305,20 +331,26 @@
       await sleep(gapTime);
     }
 
+    // hiện trái tim to
     heartContainer.classList.add("show");
-    await sleep(3500);
+    await sleep(2500);
 
+    // hiện hình ở dưới
+    finalImage.classList.add("show");
+    await sleep(1500);
+
+    // chữ bay bay
     spawnFloatingMessages();
     setTimeout(spawnFloatingMessages, 6000);
   }
 
-  // Cố gắng bật nhạc ngay khi load
+  // Cố gắng bật nhạc + chạy sequence
   window.addEventListener("load", () => {
     const bgm = document.getElementById("bgm");
     if (bgm) {
       bgm.volume = 0.8;
       bgm.play().catch(() => {
-        // nếu trình duyệt chặn thì đành chịu, không có cách nào ép
+        // nếu trình duyệt chặn autoplay thì thôi, không ép được
         console.warn("Trình duyệt chặn autoplay nhạc.");
       });
     }
@@ -329,4 +361,3 @@
 
 </body>
 </html>
-
